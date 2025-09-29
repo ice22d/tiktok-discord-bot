@@ -1,0 +1,25 @@
+name: TikTok RSS → Discord
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # alle 15 Minuten
+  workflow_dispatch: {}      # manuell starten möglich
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install feedparser requests
+      - name: Run TikTok bot
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          python check_tiktok.py
