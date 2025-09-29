@@ -22,4 +22,4 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          python check_tiktok.py
+          python check_tiktok2.py
