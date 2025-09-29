@@ -38,4 +38,6 @@ def fetch_videos():
     }
     try:
         resp = requests.get(url, headers=headers, timeout=10)
-        if resp.status
+        if resp.status_code != 200:
+    print("Fehler beim Abrufen von TikTok:", resp.status_code)
+    return []
