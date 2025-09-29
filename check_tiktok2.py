@@ -39,5 +39,32 @@ def fetch_videos():
     try:
         resp = requests.get(url, headers=headers, timeout=10)
         if resp.status_code != 200:
-    print("Fehler beim Abrufen von TikTok:", resp.status_code)
-    return []
+            print("Fehler beim Abrufen von TikTok:", resp.status_code)
+            return []
+        html = resp.text
+        # JSON-Daten im HTML suchen
+        start = html.find('window["SIGI_STATE"] =')
+        if start == -1:
+            print("Konnte TikTok-Daten nicht finden")
+            return []
+        start = html.find("{", start)
+        end = html.find("</script>", start)
+        json_text = html[start:end].strip().rstrip(";")
+        data = json.loads(json_text)
+        videos = []
+        # Extrahiere Videos
+        for vid in data.get("ItemModule", {}).values():
+            videos.append({
+                "id": vid.get("id"),
+                "desc": vid.get("desc"),
+                "url": f"https://www.tiktok.com/@{USERNAME}/video/{vid.get('id')}",
+                "thumb": vid.get("video", {}).get("cover"),
+                "author": USERNAME
+            })
+        return videos
+    except Exception as e:
+        print("Fehler beim Abrufen von TikTok:", e)
+        return []
+
+# ---------------------------
+# Disc
