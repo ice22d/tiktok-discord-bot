@@ -1,4 +1,4 @@
-name: TikTok RSS → Discord
+name: TikTok → Discord
 
 on:
   schedule:
